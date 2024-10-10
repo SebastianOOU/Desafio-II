@@ -1,0 +1,48 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+void agregarEstacion() {
+    ofstream archivo("C:\\Users\\LENOVO\\Documents\\termax_proyecto\\datos.txt", ios::app); // Abrir el archivo en modo de agregar (append)
+
+    if (!archivo.is_open()) {
+        cout << "Error al abrir el archivo." << endl;
+        return;
+    }
+
+    string estacion, codigo, gerente, region, ubicacion;
+    const string montDinero = "0"; // Monto inicial de dinero es 0
+
+    // Solicitar los datos de la nueva estación
+    cout << "ingrese el nombre de la estacion: ";
+    getline(cin, estacion);
+    cout << "ingrese el codigo de la estacion: ";
+    getline(cin, codigo);
+    cout << "ingrese el nombre del gerente: ";
+    getline(cin, gerente);
+    cout << "ingrese la region: ";
+    getline(cin, region);
+    cout << "ingrese la ubicacion (coordenadas): ";
+    getline(cin, ubicacion);
+
+    // Escribir los datos en el archivo con el mismo formato
+    archivo << "#" << endl;
+    archivo << "-estación:" << estacion << endl;
+    archivo << "--código:" << codigo << endl;
+    archivo << "---gerente:" << gerente << endl;
+    archivo << "----región:" << region << endl;
+    archivo << "-----mont_dinero:" << montDinero << endl;
+    archivo << "------ubicación:" << ubicacion << endl;
+    archivo << "#" << endl;  // Fin del bloque de la nueva estación
+
+    archivo.close();
+    cout << "Estacion agregada correctamente." << endl;
+}
+
+int main() {
+    agregarEstacion();
+    return 0;
+}
+
