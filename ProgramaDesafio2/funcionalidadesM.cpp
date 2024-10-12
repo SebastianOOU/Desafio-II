@@ -1,9 +1,11 @@
 #include <iostream>
 #include "clasesPrograma.h"
+#include <fstream>
+#include <string>
 using namespace std;//En el main se piden los datos.
 
 //CLASE ESTACION.
-bool codigoExiste(const string& codigo, const string& rutaArchivo) {
+/*bool codigoExiste(const string& codigo, const string& rutaArchivo) {
     ifstream archivo(rutaArchivo);
     string linea;
 
@@ -16,7 +18,7 @@ bool codigoExiste(const string& codigo, const string& rutaArchivo) {
     }
     archivo.close(); // Cierra el archivo si no se encontro el codigo
     return false; // El codigo no existe
-}
+}*/
 
 Estacion::Estacion(string _nombre, int _codigoIdentE, string _gerente, string _region, string _ubicacion){
 
@@ -27,7 +29,7 @@ Estacion::Estacion(string _nombre, int _codigoIdentE, string _gerente, string _r
     ubicacion = _ubicacion;
 }
 
-void Estacion::agregarEstacion(){
+/*void Estacion::agregarEstacion(){
 
     const string rutaArchivo = "C:\\Users\\LENOVO\\Documents\\termax_proyecto\\datos.txt";
     ofstream archivo(rutaArchivo, ios::app); // Abrir el archivo en modo de agregar (append)
@@ -71,7 +73,7 @@ void Estacion::agregarEstacion(){
     archivo.close();
     cout << "Estacion agregada correctamente." << endl;
 }
-
+*/
 void Estacion::setC_totalDinero(int _c_totalDinero){
 
     c_totalDinero = _c_totalDinero;
@@ -127,3 +129,126 @@ int TanqueCentral::getC_ecoExtra2(){
     return c_ecoExtra[1];
 }
 //--------------------
+//CLASE SURTIDOR
+Surtidor::Surtidor(int _codigoIdentE, string _c_ubicacion,int _modelo){
+
+    codigoIdentE = _codigoIdentE;
+    c_ubicacion = _c_ubicacion;
+    modelo = _modelo;
+}
+
+void Surtidor::setEstado(int _estado){
+    estado = _estado;
+}
+
+int Surtidor::getEstado(){
+    return estado;
+}
+
+void Surtidor::mostrarHistorial(){
+
+    ifstream archivo;
+    ofstream _archivo;
+    string datos, datostemporal, arcdata[30] = {""},h;
+
+    archivo.open("C://PruebaC++//archivoRegistros.txt", ios::in);
+    _archivo.open("C://PruebaC++//historial.txt", ios::app);
+
+    string array[9] = {"Codigo estacion", "Modelo","Tipo combustible", "Litros", "Precio combustible","metodo de pago",
+                       "Nombre", "Fecha", "hora"};
+    bool opcion = false, opcion2 = false;
+    int cont = 0, longitud;
+    if (archivo.is_open()){
+        while(!archivo.eof()){
+            getline(archivo,datos);
+            longitud = datos.length();
+            for (int x = 0; x < longitud; x++){
+                datostemporal += datos[x];
+                if (datos[x] == '#'){
+                    datostemporal = "";
+                }else if (datostemporal == std::to_string(codigoIdentE)){
+                    opcion = true;
+                    datostemporal = "";
+                }else if (datostemporal == "/"){
+                    datostemporal = "";
+                }else if(datostemporal == std::to_string(modelo)){
+                    opcion2 = true;
+                }
+                if (opcion && opcion2){
+                    arcdata[cont] = datos;
+                    cont++;
+                    opcion = false;
+                    opcion2 = false;
+                    break;
+                }
+            }
+        }
+    }else{
+        cout << "no se pudo abrir el archivo";
+    }
+    archivo.close();
+    if (arcdata[0] == ""){
+        cout << "Datos no encontrados... " << endl;
+        return;
+    }
+    int contador = 0;
+    for (int i = 0; i < cont; i++){
+        datos = arcdata[i];
+        longitud = datos.length();
+        for (int y = 0; y < longitud;y++){
+            if (h == "#"){
+                h = "";
+            }else if (datos[y] == '/'){
+                _archivo << array[contador] << ": " << h << endl;
+                h = "";
+                contador++;
+            }else if (h == "/"){
+                h = "";
+            }
+            if (contador == 9){
+                contador = 0;
+            }
+            h += datos[y];
+        }
+        _archivo << "\n";
+    }
+    _archivo.close();
+}
+//----------------
+//CLASE TRANSACCION
+Transaccion::Transaccion(int _codigoIdentE, int _modelo, int _c_cantidad, int _categoria, int _c_dinero, string _m_pago){
+    codigoIdentE = _codigoIdentE;
+    modelo = _modelo;
+    c_cantidad = _c_cantidad;
+    categoria = _categoria;
+    c_dinero = _c_dinero;
+    m_pago = _m_pago;
+}
+
+Transaccion::Transaccion(int _dia, int _mes, int _año, int _horas, int _minutos){
+    fecha[0] = _dia;
+    fecha[1] = _mes;
+    fecha[2] = _año;
+    horas[0] = _horas;
+    horas[1] = _minutos;
+}
+
+void Transaccion::setDat_cliente(string _documento, string _nombre){
+    dat_cliente[0] = _documento;
+    dat_cliente[1] = _nombre;
+}
+
+string Transaccion::getDat_cliente1(){
+    return dat_cliente[0];
+}
+
+string Transaccion::getDat_cliente2(){
+    return dat_cliente[1];
+}
+
+
+
+
+
+
+
