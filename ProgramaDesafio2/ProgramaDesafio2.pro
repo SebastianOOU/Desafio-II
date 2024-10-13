@@ -4,8 +4,11 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        funcionalidadesM.cpp \
-        main.cpp
+        main.cpp \
+        metodosEstacion.cpp \
+        metodosSurtidor.cpp \
+        metodosTanqueCentral.cpp \
+        metodosTransaccion.cpp
 
 HEADERS += \
     clasesPrograma.h

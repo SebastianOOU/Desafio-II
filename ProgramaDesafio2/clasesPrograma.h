@@ -1,4 +1,4 @@
-#ifndef CLASESPROGRAMA_H
+ #ifndef CLASESPROGRAMA_H
 #define CLASESPROGRAMA_H
 #include <iostream>
 using namespace std;
@@ -25,15 +25,13 @@ class Estacion{
 class TanqueCentral{
     private:
         int codigoIdentE;
-        int c_regular[2];
-        int c_premium[2];//(cantidad litros, precio)
-        int c_ecoExtra[2];
-        int *datos_litros;
-    public:
-        TanqueCentral(int, int);//listo
         int precioSur[3];
         int precioNorte[3];
         int precioCentro[3];
+        int *datos_litros;
+    public:
+        TanqueCentral();
+        TanqueCentral(int, int);//listo
         void fijarPreciosCom();//listo
         void asignarcantLitros();
         void verificarFugas();
@@ -53,8 +51,8 @@ class Surtidor{
         int estado;
     public:
         Surtidor(int,int,string _c_ubicacion = "0");//listo
-        void eliminarSurtidor();
-        void agregarSurtidor();
+        void eliminarSurtidor();//listo
+        void agregarSurtidor();//listo
         void mostrarHistorial();//listo
         void setEstado(int);//listo
         int getEstado();//listo
