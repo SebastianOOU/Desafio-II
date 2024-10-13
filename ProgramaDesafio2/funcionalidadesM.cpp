@@ -74,22 +74,30 @@ Estacion::Estacion(string _nombre, int _codigoIdentE, string _gerente, string _r
     cout << "Estacion agregada correctamente." << endl;
 }
 */
-void Estacion::setC_totalDinero(int _c_totalDinero){
+void Estacion::setC_totalSurt(int _c_surtidores){
 
-    c_totalDinero = _c_totalDinero;
+    c_surtidores = _c_surtidores;
 }
 
-int Estacion::getC_totalDinero(){
+int Estacion::getC_totalSurt(){
 
-    return c_totalDinero;
+    return c_surtidores;
 }
 //------------------
 //CLASE TANQUECENTRAL
-TanqueCentral::TanqueCentral(int _codigoIdentE){
+TanqueCentral::TanqueCentral(int _codigoIdentE, int capacidad){
 
     codigoIdentE = _codigoIdentE;
+    datos_litros = new int[capacidad];
+
 }
 
+void TanqueCentral::asignarcantLitros(){
+
+    datos_litros = new int[100];
+
+    datos_litros = {123,150,120,200,342,100,110,145};
+}
 void TanqueCentral::setC_regular(int _cantidad, int _precio){
     c_regular[0] = _cantidad;
     c_regular[1] = _precio;
@@ -128,9 +136,61 @@ int TanqueCentral::getC_ecoExtra1(){
 int TanqueCentral::getC_ecoExtra2(){
     return c_ecoExtra[1];
 }
+
+//void TanqueCentral::asignarcantLitros(){
+
+
+
+void TanqueCentral::fijarPreciosCom(){
+
+    ifstream archivo;
+    ofstream _archivo;
+    string array[12] = {"centro", std::to_string(getC_regular2()), std::to_string(getC_premium2()), std::to_string(getC_ecoExtra2())};
+    string datos;
+    int cont = 4, a = 0;
+
+    archivo.open("C://PruebaC++//preciosCombustible.txt");
+
+    if (archivo.is_open()){
+
+        while(!archivo.eof()){
+            getline(archivo,datos);
+
+            if (datos == "centro"){
+                a = 3;
+                datos = "";
+            }else{
+
+                if (a == 0){
+                    array[cont] = datos;
+                    datos = "";
+                    cont++;
+                }else{
+                    a--;
+                }
+            }
+            if (cont == 12){
+                break;
+            }
+        }
+    }else{
+        cout << "No se pudo abrir el archivo";
+        return;
+    }
+    archivo.close();
+
+    _archivo.open("C://PruebaC++//preciosCombustible.txt", ios::out);
+
+    for (int i = 0; i < 12; i++){
+        _archivo << array[i] << endl;
+    }
+    _archivo.close();
+
+
+}
 //--------------------
 //CLASE SURTIDOR
-Surtidor::Surtidor(int _codigoIdentE, string _c_ubicacion,int _modelo){
+Surtidor::Surtidor(int _codigoIdentE,int _modelo, string _c_ubicacion){
 
     codigoIdentE = _codigoIdentE;
     c_ubicacion = _c_ubicacion;
@@ -149,32 +209,40 @@ void Surtidor::mostrarHistorial(){
 
     ifstream archivo;
     ofstream _archivo;
-    string datos, datostemporal, arcdata[30] = {""},h;
+    string datos, datostemporal, arcdata[30] = {""};
 
-    archivo.open("C://PruebaC++//archivoRegistros.txt", ios::in);
+    archivo.open("C://PruebaC++//archivoRegistros.txt");
     _archivo.open("C://PruebaC++//historial.txt", ios::app);
 
-    string array[9] = {"Codigo estacion", "Modelo","Tipo combustible", "Litros", "Precio combustible","metodo de pago",
-                       "Nombre", "Fecha", "hora"};
+    string array[10] = {"Codigo estacion", "Modelo","Tipo combustible", "Litros", "Precio combustible","Metodo de pago",
+                       "Nombre","Documento", "Fecha", "Hora"};
+
     bool opcion = false, opcion2 = false;
     int cont = 0, longitud;
+
     if (archivo.is_open()){
+
         while(!archivo.eof()){
             getline(archivo,datos);
             longitud = datos.length();
+
             for (int x = 0; x < longitud; x++){
                 datostemporal += datos[x];
-                if (datos[x] == '#'){
+                if (datos[x] == '#'){                
                     datostemporal = "";
-                }else if (datostemporal == std::to_string(codigoIdentE)){
+
+                }else if (datostemporal == std::to_string(codigoIdentE)){                
                     opcion = true;
                     datostemporal = "";
-                }else if (datostemporal == "/"){
+
+                }else if (datostemporal == "/"){                   
                     datostemporal = "";
+
                 }else if(datostemporal == std::to_string(modelo)){
                     opcion2 = true;
                 }
                 if (opcion && opcion2){
+
                     arcdata[cont] = datos;
                     cont++;
                     opcion = false;
@@ -187,28 +255,33 @@ void Surtidor::mostrarHistorial(){
         cout << "no se pudo abrir el archivo";
     }
     archivo.close();
+
     if (arcdata[0] == ""){
         cout << "Datos no encontrados... " << endl;
         return;
     }
+
     int contador = 0;
     for (int i = 0; i < cont; i++){
+        datostemporal = "";
         datos = arcdata[i];
         longitud = datos.length();
         for (int y = 0; y < longitud;y++){
-            if (h == "#"){
-                h = "";
-            }else if (datos[y] == '/'){
-                _archivo << array[contador] << ": " << h << endl;
-                h = "";
-                contador++;
-            }else if (h == "/"){
-                h = "";
+            if (datostemporal == "#"){
+                datostemporal = "";
+            }else if (datostemporal == "/"){
+                datostemporal = "";
+            }else{
+                if (datos[y] == '/'){
+                    _archivo << array[contador] << ": " << datostemporal << endl;
+                    datostemporal = "";
+                    contador++;
+                }
             }
-            if (contador == 9){
+            if (contador == 10){
                 contador = 0;
             }
-            h += datos[y];
+            datostemporal += datos[y];
         }
         _archivo << "\n";
     }
