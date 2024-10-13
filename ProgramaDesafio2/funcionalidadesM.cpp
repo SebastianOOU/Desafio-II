@@ -137,10 +137,6 @@ int TanqueCentral::getC_ecoExtra2(){
     return c_ecoExtra[1];
 }
 
-//void TanqueCentral::asignarcantLitros(){
-
-
-
 void TanqueCentral::fijarPreciosCom(){
 
     ifstream archivo;
