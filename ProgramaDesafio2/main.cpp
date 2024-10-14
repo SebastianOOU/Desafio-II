@@ -11,8 +11,11 @@ int main(){
     h.setC_regular(0, com1);
     h.setC_premium(0, com2);
     h.fijarPreciosCom();*/
-    Surtidor surtidor(567,12345);
-    surtidor.mostrarHistorial();
+    //Surtidor surtidor(567,12345);
+    //surtidor.mostrarHistorial();
+    TanqueCentral tanqueCentral;
+    tanqueCentral.leerCodigosEstacion();
+    TanqueCentral _tanqueCentral(tanqueCentral.getCantidadE());
 
     //surtudor.mostrarHistorial();
     //cout << "Hello World!" << endl;

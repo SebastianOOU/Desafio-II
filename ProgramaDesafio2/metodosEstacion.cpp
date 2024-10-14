@@ -5,7 +5,7 @@
 #include <string>
 using namespace std;
 //CLASE ESTACION.
-/*bool codigoExiste(const string& codigo, const string& rutaArchivo) {
+bool codigoExiste(const string& codigo, const string& rutaArchivo) {
     ifstream archivo(rutaArchivo);
     string linea;
 
@@ -18,7 +18,7 @@ using namespace std;
     }
     archivo.close(); // Cierra el archivo si no se encontro el codigo
     return false; // El codigo no existe
-}*/
+}
 
 Estacion::Estacion(string _nombre, int _codigoIdentE, string _gerente, string _region, string _ubicacion){
 
