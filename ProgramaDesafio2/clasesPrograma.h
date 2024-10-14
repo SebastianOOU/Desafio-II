@@ -24,23 +24,22 @@ class Estacion{
 
 class TanqueCentral{
     private:
-        int codigoIdentE;
+        int cantidadE;
         int precioSur[3];
         int precioNorte[3];
         int precioCentro[3];
         int *datos_litros;
+        int *codigoEstacion;
     public:
-        TanqueCentral();
-        TanqueCentral(int, int);//listo
+        TanqueCentral();//listo
+        TanqueCentral(int);
         void fijarPreciosCom();//listo
-        void asignarcantLitros();
+        void asignarcantLitros();//
+        void leerCodigosEstacion();//listo
         void verificarFugas();
-        void setC_regular(int,int);//listo
-        void setC_premium(int,int);//listo
-        void setC_ecoExtra(int,int);//listo
-        int getC_regular1();int getC_regular2();//listo
-        int getC_premium1();int getC_premium2();//listo
-        int getC_ecoExtra1();int getC_ecoExtra2();//listo
+        void setCantidadE(int);//listo
+        int getCantidadE();//listo
+
 };
 
 class Surtidor{
