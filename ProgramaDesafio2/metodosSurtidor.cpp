@@ -4,12 +4,15 @@
 #include <fstream>
 #include <string>
 using namespace std;
-//CLASE SURTIDOR
-Surtidor::Surtidor(int _codigoIdentE,int _modelo, string _c_ubicacion){
+
+string *datosA = new string [200];
+
+Surtidor::Surtidor(string _codigoIdentE,string _modelo, string _c_ubicacion){
 
     codigoIdentE = _codigoIdentE;
     c_ubicacion = _c_ubicacion;
     modelo = _modelo;
+    datos_archivo = new string[300];
 }
 
 void Surtidor::agregarSurtidor(){
@@ -18,10 +21,10 @@ void Surtidor::agregarSurtidor(){
 
     archivo.open("C://PruebaC++//datosSurtidores.txt", ios::app);
 
-    archivo << std::to_string(codigoIdentE) << "/";
-    archivo << std::to_string(modelo) << "/";
+    archivo << codigoIdentE << "/";
+    archivo << modelo << "/";
     archivo << c_ubicacion << "/";
-    archivo << "activo" << endl;
+    archivo << getEstado() << endl;
 
     archivo.close();
     //Falta actualizar el numero de surtidores en la estacion correspondiente.
@@ -33,7 +36,6 @@ void Surtidor::eliminarSurtidor(){
     ofstream _archivo;
 
     string datos, caracteres;
-    string *datos_archivo = new string[300];
     int contador = 0;
     bool opcion;
 
@@ -57,7 +59,7 @@ void Surtidor::eliminarSurtidor(){
         int longitud = datos.size();
         for (int y = 0; y < longitud; y++){
             if (opcion && datos[y] == '/'){
-                if (caracteres == std::to_string(modelo)){
+                if (caracteres == modelo){
                     caracteres = "";
                     opcion = false;
                     break;
@@ -69,7 +71,7 @@ void Surtidor::eliminarSurtidor(){
                 }
             }
             if (datos[y] == '/'){
-                if (caracteres == std::to_string(codigoIdentE)){
+                if (caracteres == codigoIdentE){
                     opcion = true;
                     caracteres = "";
                 }else{
@@ -83,13 +85,14 @@ void Surtidor::eliminarSurtidor(){
         }
     }
     _archivo.close();
-    delete[] datos_archivo;//Falta actulizare el numero de surtidores en la estacion correspondiente
+    //Falta actulizare el numero de surtidores en la estacion correspondiente
 }
-void Surtidor::setEstado(int _estado){
+
+void Surtidor::setEstado(string _estado){
     estado = _estado;
 }
 
-int Surtidor::getEstado(){
+string Surtidor::getEstado(){
     return estado;
 }
 
@@ -119,14 +122,14 @@ void Surtidor::mostrarHistorial(){
                 if (datos[x] == '#'){
                     datostemporal = "";
 
-                }else if (datostemporal == std::to_string(codigoIdentE)){
+                }else if (datostemporal == codigoIdentE){
                     opcion = true;
                     datostemporal = "";
 
                 }else if (datostemporal == "/"){
                     datostemporal = "";
 
-                }else if(datostemporal == std::to_string(modelo)){
+                }else if(datostemporal == modelo){
                     opcion2 = true;
                 }
                 if (opcion && opcion2){
@@ -174,4 +177,59 @@ void Surtidor::mostrarHistorial(){
         _archivo << "\n";
     }
     _archivo.close();
+}
+
+void Surtidor::modificarAcIn(int b){
+
+    ifstream archivo;
+    ofstream _archivo;
+
+    string datos, _datos = codigoIdentE + "/" + modelo + "/" + c_ubicacion + "/" + estado, _estado;
+    int contador = 0;
+    bool a = false;
+
+    if (b == 1){
+        _estado = "activo";
+    }else{
+        _estado = "inactivo";
+    }
+
+    archivo.open("C://PruebaC++//datosSurtidores.txt", ios::in);
+
+    if (!archivo.is_open()){
+        cout << "No se pudo abrir le archivo" << endl;
+        return;
+    }
+
+    while(!archivo.eof()){
+        getline(archivo,datos);
+        if (datos == _datos){
+            datosA[contador] = codigoIdentE + "/" + modelo + "/" + c_ubicacion + "/" + _estado;
+            a = true;
+            datos = "";
+        }else{
+            datosA[contador] = datos;
+            datos = "";
+        }
+        contador++;
+    }
+
+    if(!a){
+        cout << "El surtidor no existe, verifique su entrada";
+        return;
+    }
+
+    archivo.close();
+    _archivo.open("C://PruebaC++//datosSurtidores.txt", ios::out);
+
+    for (int i = 0; i < contador; i++){
+        _archivo << datosA[i] << endl;
+    }
+
+    _archivo.close();
+}
+
+Surtidor::~Surtidor(){
+    delete[] datos_archivo;
+    delete[] datosA;
 }
