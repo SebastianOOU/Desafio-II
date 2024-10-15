@@ -42,12 +42,16 @@ TanqueCentral::TanqueCentral(int capacidad){
     datos_litros = new int[capacidad * 5];
 }
 
-void TanqueCentral::asignarcantLitros(){
+/*void TanqueCentral::asignarcantLitros(){
 
-        //datos_litros = new int[100];
-
-    //datos_litros = {123,150,120,200,342,100,110,145};
-}
+    int contador = 0;
+    for(int i = 0; i < cantidadE; i++){
+        int codigoE = codigoEstacion[i];
+        for(int y = 0; y < 5; y++){
+            int num =
+        }
+    }
+}*/
 
 void pedirPrecios(int &a, int &b, int &c){
 
