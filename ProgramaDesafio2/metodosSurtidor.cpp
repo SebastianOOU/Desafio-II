@@ -5,14 +5,15 @@
 #include <string>
 using namespace std;
 
-string *datosA = new string [200];
+
 
 Surtidor::Surtidor(string _codigoIdentE,string _modelo, string _c_ubicacion){
 
     codigoIdentE = _codigoIdentE;
     c_ubicacion = _c_ubicacion;
     modelo = _modelo;
-    datos_archivo = new string[300];
+    datosA = new string [400];
+    datosH = new string [400];
 }
 
 void Surtidor::agregarSurtidor(){
@@ -27,65 +28,100 @@ void Surtidor::agregarSurtidor(){
     archivo << getEstado() << endl;
 
     archivo.close();
+    actualizarDatosE(1);
     //Falta actualizar el numero de surtidores en la estacion correspondiente.
 }
 
 void Surtidor::eliminarSurtidor(){
 
-    ifstream archivo;
-    ofstream _archivo;
+    ifstream archivo, arcHis;
+    ofstream _archivo, _arcHis;
 
-    string datos, caracteres;
-    int contador = 0;
-    bool opcion;
+    string datos, _datos = codigoIdentE + "/" + modelo + "/" + c_ubicacion + "/" + estado;
+    string codigoModelo = codigoIdentE + "/" + modelo + "/", datosHis;
+    int contador1 = 0, contador2 = 0, longitud;
+    bool a = false;
 
-    archivo.open("C://PruebaC++//datosSurtidores.txt");
+    archivo.open("C://PruebaC++//datosSurtidores.txt", ios::in);
+    arcHis.open("C://PruebaC++//archivoRegistros.txt", ios::in);
 
-    if (archivo.is_open()){
-        while(!archivo.eof()){
-            getline(archivo, datos);
-            datos_archivo[contador] = datos;
-            datos = "";
-            contador++;
-        }
-    }else{
-        cout << "El archivo no se pudo abrir...";
+    if (!archivo.is_open()){
+        cout << "No se pudo abrir le archivo" << endl;
         return;
     }
-    archivo.close();
-    _archivo.open("C://PruebaC++//datosSurtidores.txt");
-    for (int i = 0; i < contador; i++){
-        datos = datos_archivo[i];
-        int longitud = datos.size();
-        for (int y = 0; y < longitud; y++){
-            if (opcion && datos[y] == '/'){
-                if (caracteres == modelo){
-                    caracteres = "";
-                    opcion = false;
-                    break;
-                }else{
-                    _archivo << datos << endl;
-                    caracteres = "";
-                    opcion = false;
-                    break;
-                }
+
+    if (!arcHis.is_open()){
+        cout << "No se pudo abrir le archivo" << endl;
+        return;
+    }
+
+    while(!archivo.eof()){
+
+        getline(archivo,datos);
+        if (datos == _datos){
+            a = true;
+            datos = "";
+        }else{
+            datosA[contador1] = datos;
+            datos = "";
+        }
+        contador1++;
+    }
+
+    if(!a){
+        cout << "----> El surtidor no existe o esta activo, verifique su entrada" << endl;
+        return;
+    }
+
+    while(!arcHis.eof()){
+
+        getline(arcHis,datos);
+        longitud = datos.length();
+        int cont = 0;
+        for (int i = 0; i < longitud; i++){
+
+            if (datos[i] == '/'){
+                cont++;
             }
-            if (datos[y] == '/'){
-                if (caracteres == codigoIdentE){
-                    opcion = true;
-                    caracteres = "";
+
+            datosHis += datos[i];
+
+            if(cont == 2){
+
+                if(datosHis == codigoModelo){
+
+                    datosHis = "";
+                    datos = "";
+                    break;
                 }else{
-                    _archivo << datos << endl;
-                    caracteres = "";
+
+                    datosH[contador2] = datos;
+                    contador2++;
+                    datosHis = "";
+                    datos = "";
                     break;
                 }
-            }else{
-                caracteres += datos[y];
             }
         }
     }
+
+    archivo.close();
+    archivo.close();
+
+    _archivo.open("C://PruebaC++//datosSurtidores.txt", ios::out);
+    _arcHis.open("C://PruebaC++//archivoRegistros.txt", ios::out);
+
+    for (int i = 0; i < contador1; i++){
+        _archivo << datosA[i] << endl;
+    }
+
+    for (int i = 0; i < contador2; i++){
+        _arcHis << datosH[i] << endl;
+    }
+
     _archivo.close();
-    //Falta actulizare el numero de surtidores en la estacion correspondiente
+    _arcHis.close();
+    actualizarDatosE(-1);
 }
 
 void Surtidor::setEstado(string _estado){
@@ -100,81 +136,78 @@ void Surtidor::mostrarHistorial(){
 
     ifstream archivo;
     ofstream _archivo;
-    string datos, datostemporal, arcdata[30] = {""};
+
+    string datos, _datos, codigoModelo = codigoIdentE + "/" + modelo + "/";
+
+    string array[10] = {"- Codigo estacion", "- Modelo surtidor","- Tipo combustible", "- Litros vendidos", "- Precio combustible","- Metodo de pago",
+                        "- Nombre cliente","- Documento cliente", "- Fecha", "- Hora"};
 
     archivo.open("C://PruebaC++//archivoRegistros.txt");
-    _archivo.open("C://PruebaC++//historial.txt", ios::app);
 
-    string array[10] = {"Codigo estacion", "Modelo","Tipo combustible", "Litros", "Precio combustible","Metodo de pago",
-                        "Nombre","Documento", "Fecha", "Hora"};
+    int contador = 0, longitud;
 
-    bool opcion = false, opcion2 = false;
-    int cont = 0, longitud;
+    if (!archivo.is_open()){
+        cout << "no se pudo abrir el archivo";
+    }
 
-    if (archivo.is_open()){
+    while(!archivo.eof()){
 
-        while(!archivo.eof()){
-            getline(archivo,datos);
-            longitud = datos.length();
+        getline(archivo,datos);
+        longitud = datos.length();
+        int cont = 0;
+        for (int i = 0; i < longitud; i++){
 
-            for (int x = 0; x < longitud; x++){
-                datostemporal += datos[x];
-                if (datos[x] == '#'){
-                    datostemporal = "";
+            if (datos[i] == '/'){
+                cont++;
+            }
 
-                }else if (datostemporal == codigoIdentE){
-                    opcion = true;
-                    datostemporal = "";
+            _datos += datos[i];
 
-                }else if (datostemporal == "/"){
-                    datostemporal = "";
+            if(cont == 2){
 
-                }else if(datostemporal == modelo){
-                    opcion2 = true;
-                }
-                if (opcion && opcion2){
+                if(_datos == codigoModelo){
 
-                    arcdata[cont] = datos;
-                    cont++;
-                    opcion = false;
-                    opcion2 = false;
+                    datosA[contador] = datos;
+                    contador++;
+                    _datos = "";
+                    datos = "";
+                    break;
+                }else{
+
+                    _datos = "";
+                    datos = "";
                     break;
                 }
             }
         }
-    }else{
-        cout << "no se pudo abrir el archivo";
     }
     archivo.close();
 
-    if (arcdata[0] == ""){
+    _archivo.open("C://PruebaC++//historial.txt", ios::out);
+
+    /*if (arcdata[0] == ""){
         cout << "Datos no encontrados... " << endl;
         return;
-    }
+    }*/
 
-    int contador = 0;
-    for (int i = 0; i < cont; i++){
-        datostemporal = "";
-        datos = arcdata[i];
-        longitud = datos.length();
-        for (int y = 0; y < longitud;y++){
-            if (datostemporal == "#"){
-                datostemporal = "";
-            }else if (datostemporal == "/"){
-                datostemporal = "";
+    for (int i = 0; i < contador; i++){
+
+        datos = datosA[i];
+        longitud = datos.size();
+        int _cont = 0;
+
+        for (int x = 0; x < longitud; x++){
+
+            if(datos[x] == '/'){
+
+                _archivo << array[_cont] << ": " << _datos << endl;
+                _datos = "";
+                _cont++;
             }else{
-                if (datos[y] == '/'){
-                    _archivo << array[contador] << ": " << datostemporal << endl;
-                    datostemporal = "";
-                    contador++;
-                }
+                _datos += datos[x];
             }
-            if (contador == 10){
-                contador = 0;
-            }
-            datostemporal += datos[y];
         }
-        _archivo << "\n";
+        _archivo << "------------------" << endl;
     }
     _archivo.close();
 }
@@ -215,7 +248,7 @@ void Surtidor::modificarAcIn(int b){
     }
 
     if(!a){
-        cout << "El surtidor no existe, verifique su entrada";
+        cout << "-----> El surtidor no existe o esta " << _estado;
         return;
     }
 
@@ -229,7 +262,88 @@ void Surtidor::modificarAcIn(int b){
     _archivo.close();
 }
 
+void Surtidor::actualizarDatosE(int sumRes){
+
+    ifstream archivo;
+    ofstream _archivo;
+    string datos, _datos;
+    bool opcion1 = false, opcion2 = true;
+    int contador = 0;
+    archivo.open("C://PruebaC++//archivo.txt", ios::in);
+
+    if(!archivo.is_open()){
+        cout << "No fue posible abrir el archivo." << endl;
+        return;
+    }
+
+    while(!archivo.eof()){
+
+        getline(archivo,datos);
+        int longitud = datos.size(), cont = 0, numSur;
+        string __datos;
+        if (opcion1){
+
+            for(int i = 0; i < longitud; i++){
+
+                if(datos[i] == '-'){
+                    cont++;
+                    _datos = "";
+                    if (datos[i + 1] != '-' && cont != 5){
+                        datosA[contador] = datos;
+                        datos = "";
+                        break;
+                    }
+                }
+
+
+                if (opcion2){
+                    __datos += datos[i];
+                }
+
+                _datos += datos[i];
+
+                if (cont == 5){
+
+                    if (datos[i] == ':'){
+
+                        _datos = "";
+                        opcion2 = false;
+                    }
+                    if (i == longitud - 1){
+
+                        numSur = stoi(_datos);
+                        numSur = numSur + sumRes;
+                        __datos += std::to_string(numSur);
+                        datosA[contador] = __datos;
+                        opcion1 = false;
+                        datos = "";
+                    }
+                }
+            }
+            contador++;
+        }else if(datos == "--codigo:" + codigoIdentE){
+            opcion1 = true;
+            datosA[contador] = datos;
+            contador++;
+            datos = "";
+        }else{
+            datosA[contador] = datos;
+            contador++;
+            datos = "";
+        }
+
+    }
+
+    archivo.close();
+    _archivo.open("C://PruebaC++//archivo.txt", ios::out);
+
+    for (int i = 0; i < contador; i++){
+        _archivo << datosA[i] << endl;
+    }
+    _archivo.close();
+}
+
 Surtidor::~Surtidor(){
-    delete[] datos_archivo;
     delete[] datosA;
+    delete[] datosH;
 }
