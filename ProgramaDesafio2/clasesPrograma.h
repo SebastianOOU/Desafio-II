@@ -1,4 +1,4 @@
- #ifndef CLASESPROGRAMA_H
+#ifndef CLASESPROGRAMA_H
 #define CLASESPROGRAMA_H
 #include <iostream>
 using namespace std;
@@ -6,76 +6,88 @@ using namespace std;
 class Estacion{
     private:
         string nombre;
-        int codigoIdentE;
+        string codigoIdentE;
         string gerente;
         string region;
         string ubicacion;
         int c_surtidores;
     public:
-        Estacion(string,int,string,string,string);//listo
-        void agregarEstacion();//listo
-        void eliminarEstacion();
-        void setC_totalSurt(int);//listo
-        int getC_totalSurt();//listo
-        void calcularMonto();
-        void mostrarMonto();
-        void reportarCanLitros();
+        Estacion(string);
+        Estacion(string,string,string,string,string);
+        void agregarEstacion();
+        void eliminarEstacion(string);
+        void verificarFugas(int,int,int);//
+        void calcularMonto(bool, int _ltrsCop = 4, bool = false);
+        void mostrarMonto(int,int,int,int,bool);//
+        void reportarCanLitros(bool);
+        void setC_totalSurt(int num = 0);
+        int getC_totalSurt();
 };
 
 class TanqueCentral{
     private:
-        int cantidadE;
+        string codigoIdentE;
         int precioSur[3];
         int precioNorte[3];
         int precioCentro[3];
-        int *datos_litros;
-        int *codigoEstacion;
+        string *codigoEstacion;
     public:
-        TanqueCentral();//listo
-        TanqueCentral(int);
-        void fijarPreciosCom();//listo
-        void asignarcantLitros();//
-        void leerCodigosEstacion();//listo
-        void verificarFugas();
-        void setCantidadE(int);//listo
-        int getCantidadE();//listo
-
+        TanqueCentral();
+        TanqueCentral(string);  
+        void fijarPreciosCom();
+        void asignarcantLitros();
+        void setPrecioSur1(int);int getPrecioSur1();
+        void setPrecioSur2(int);int getPrecioSur2();
+        void setPrecioSur3(int);int getPrecioSur3();
+        void setPrecioNorte1(int);int getPrecioNorte1();
+        void setPrecioNorte2(int);int getPrecioNorte2();
+        void setPrecioNorte3(int);int getPrecioNorte3();
+        void setPrecioCentro1(int);int getPrecioCentro1();
+        void setPrecioCentro2(int);int getPrecioCentro2();
+        void setPrecioCentro3(int);int getPrecioCentro3();
+        ~TanqueCentral();
 };
 
 class Surtidor{
     private:
-        int codigoIdentE;
+        string codigoIdentE;
         string c_ubicacion;
-        int modelo;
-        int estado;
+        string modelo;
+        string estado;
     public:
-        Surtidor(int,int,string _c_ubicacion = "0");//listo
-        void eliminarSurtidor();//listo
-        void agregarSurtidor();//listo
-        void mostrarHistorial();//listo
-        void setEstado(int);//listo
-        int getEstado();//listo
+        Surtidor(string,string,string _c_ubicacion = "0");
+        string *datosA, *datosH;
+        void eliminarSurtidor();
+        void agregarSurtidor();
+        void mostrarHistorial();
+        void modificarAcIn(int);
+        void actualizarDatosE(int);
+        void setEstado(string);
+        string getEstado();
+        ~Surtidor();
 };
 
 class Transaccion{
     private:
-        int codigoIdentE;
-        int modelo;
+        string codigoIdentE;
+        string modelo;
         int fecha[3];
         int horas[2];
         int c_cantidad;
-        int categoria;
+        string categoria;
         string m_pago;
         int c_dinero;
         string dat_cliente[2];
     public:
-        Transaccion(int,int,int,int,int,string);//listo
-        Transaccion(int,int,int,int,int);//listo
-        void simularVenta();
-        void actualizarLitros();
+        string *datosLtrs;
+        Transaccion(string,string,string);
+        void simularVenta(int,int,int,int);
+        void verificarEstacion(int &, int &);
+        void actualizarLitros(int);
         void mostrarRegistroventa();
-        void setDat_cliente(string,string);//listo
-        string getDat_cliente1();//listo
-        string getDat_cliente2();//listo
+        void setDat_cliente(string,string);
+        string getDat_cliente1();
+        string getDat_cliente2();
+        ~Transaccion();
 };
 #endif // CLASESPROGRAMA_H
