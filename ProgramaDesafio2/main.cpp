@@ -29,8 +29,11 @@ int main(){
             estacion.agregarEstacion();
 
         }else if (opcion == 'b'){
-
-            //estacion.eliminarEstacion();
+            //Eliminar Estacion
+            cout << "Ingrese el nombre de la estacion: ";
+            cin >> nombreE;
+            Estacion estacion("0");
+            estacion.eliminarEstacion(nombreE);
 
         }else if (opcion == 'c'){
             //Cantidad COP nivel nacional
