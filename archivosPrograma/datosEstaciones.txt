@@ -1,0 +1,70 @@
+#
+-estacion:Biomax
+--codigo:007
+---gerente:Gustavo
+----region:sur
+-----surtidores:2
+------ubicacion:11°14'52.7"N 74°12'10.3"W
+# 
+-estacion:Biomax
+--codigo:102
+---gerente:Gustavo
+----region:caribe
+-----surtidores:2
+------ubicacion:11°14'52.7"N 74°12'10.3"W
+#
+-estacion:Esso
+--codigo:009
+---gerente:Juan
+----region:centro
+-----surtidores:3
+------ubicacion:4°36'44.5"N 74°04'22.3"W
+#
+-estacion:Chevron
+--codigo:010
+---gerente:Marta
+----region:sur
+-----surtidores:2
+------ubicacion:3°25'48.6"S 76°32'43.1"W
+#
+-estacion:Petromil
+--codigo:011
+---gerente:Luis
+----region:norte
+-----surtidores:4
+------ubicacion:11°00'32.4"N 74°48'11.6"W
+#
+-estacion:ExxonMobil
+--codigo:012
+---gerente:Pedro
+----region:centro
+-----surtidores:3
+------ubicacion:5°03'45.6"N 73°58'55.4"W
+#
+-estacion:Shell
+--codigo:013
+---gerente:Sofía
+----region:sur
+-----surtidores:4
+------ubicacion:2°56'48.7"S 75°17'42.1"W
+#
+-estacion:Texaco
+--codigo:014
+---gerente:Camila
+----region:norte
+-----surtidores:2
+------ubicacion:12°34'24.7"N 71°45'16.2"W
+#
+-estacion:Ecospetrol
+--codigo:015
+---gerente:Diego
+----region:centro
+-----surtidores:3
+------ubicacion:4°42'36.8"N 74°21'08.9"W
+#
+-estacion:Juana
+--codigo:343
+---gerente:Juano
+----region:sur
+-----surtidores:3
+------ubicacion:N okrf234
