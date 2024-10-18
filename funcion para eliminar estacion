@@ -1,0 +1,59 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+void eliminarEstacion(const string& nombreEstacion, const string& direccion) {
+    ifstream archivoEntrada(direccion);
+    string contenido = "", linea;
+    bool borrar = false;
+    bool estacionEncontrada = false; // Variable para verificar si se encontró la estación
+
+    if (archivoEntrada.is_open()) {
+        while (getline(archivoEntrada, linea)) {
+            // Verifica si la línea contiene el nombre de la estación a eliminar
+            if (linea.find("estación:" + nombreEstacion) != string::npos) {
+                borrar = true; // Inicia el proceso de borrado
+                estacionEncontrada = true; // Marca que se encontró la estación
+            }
+
+            // Detiene el proceso de borrado cuando encuentra el siguiente '#' (otra estación)
+            if (linea.find("#") != string::npos && borrar) {
+                borrar = false;
+                continue; // Evita agregar el separador '#' después de la estación eliminada
+            }
+
+            // Si no se está borrando, añadir al contenido final
+            if (!borrar) {
+                contenido += linea + "\n";
+            }
+        }
+        archivoEntrada.close();
+
+        // Sobrescribir el archivo con las estaciones restantes
+        ofstream archivoSalida(direccion);
+        archivoSalida << contenido;
+        archivoSalida.close();
+
+        // Verificar si la estación fue encontrada
+        if (!estacionEncontrada) {
+            cout << "Estación no existe." << endl;
+        }
+
+    } else {
+        cout << "No se pudo abrir el archivo." << endl;
+    }
+}
+
+int main() {
+    string nombreEstacion;
+    string direccion = "C:\\Users\\LENOVO\\Documents\\termax_proyecto\\datos.txt"; // Cambia según la ubicación de tu memoria USB
+
+    cout << "Introduce el nombre de la estacion que deseas eliminar: ";
+    cin >> nombreEstacion;
+
+    eliminarEstacion(nombreEstacion, direccion);
+
+    cout << "Proceso de eliminacion completado." << endl;
+    return 0;
+}
